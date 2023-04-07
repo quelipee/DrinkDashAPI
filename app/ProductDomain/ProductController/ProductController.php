@@ -44,7 +44,12 @@ class ProductController extends Controller
 
     public function buy_product($id, Request $request)
     {
-        //TODO CONFIGURAR A QUANTIDADE QUE RECEBE DO INPUT DO FRONT END, ONDE RECEBE AQUI NO (REQUEST)
+        /*
+         * TODO CONFIGURAR A QUANTIDADE QUE RECEBE DO INPUT DO FRONT END, ONDE RECEBE AQUI NO (REQUEST)
+         *
+         * esse request esta voltando as informações do usuario e a quantidade do produto que vai comprar
+         *
+         * */
         $order = $this->productService->buy_product($id,$request);
         return OrderResource::make($order);
     }
