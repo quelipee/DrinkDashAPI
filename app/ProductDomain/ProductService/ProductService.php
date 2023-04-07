@@ -37,11 +37,6 @@ class ProductService
             if (Product::where('name', $product->name)->exists()) {
                 throw new Exception('Error: Produto já cadastrado!!!');
             }
-            /*
-             * firstorCreate ele verifica se ja existe um item com o mesmo nome, caso nao exista
-             *  ele cria um item, se nao ele nao executa
-             *
-             * */
 
             $new_product = new Product([
                     'name' => $product->name,
