@@ -41,15 +41,16 @@ class UserTest extends TestCase
     public function test_user_can_login()
     {
         //preapre
+        $user = User::first();
         $payload = [
-            'name' => 'felipe',
-            'email' => 'fe@gmail.com',
+            'name' => $user->name,
+            'email' => $user->email,
             'password' => 123
         ];
         //act
         $response = $this->post('api/login', $payload);
         //assert
-        $this->assertDatabaseHas('users',['name' => $payload['name']]);
+        $this->assertDatabaseHas('users',['email' => $payload['email']]);
         $response->assertStatus(Response::HTTP_CREATED);
     }
 
@@ -89,11 +90,11 @@ class UserTest extends TestCase
     public function test_user_can_buy_product()
     {
         //prepare
-        $user = User::first();
+        $user = User::latest()->first();
         $user['qtd'] = random_int(1,5);
         $product = Product::find(random_int(0,24));
         //act
-        $response = $this->actingAs($user)->post('api/buy_product/' . $product->id, $user->toArray());
+        $response = $this->actingAs($user)->post('api/buy_product/' . 1, $user->toArray());
         //assert
         $response->assertStatus(Response::HTTP_OK);
 
