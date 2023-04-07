@@ -2,6 +2,7 @@
 
 namespace App\UserDomain\Repository;
 
+use App\Models\Balance;
 use App\Models\Client;
 use App\Models\User;
 
@@ -20,5 +21,10 @@ class UserRepository
     public function get_client($data): object
     {
         return Client::query()->where('user_id',$data->id)->first();
+    }
+
+    public function get_balance_client($data)
+    {
+        return Balance::where('client_id',$data->id)->first();
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\Models\User;
+use App\UserDomain\Repository\UserRepository;
 use Exception;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -12,8 +13,6 @@ class UserTest extends TestCase
 {
     /*
      * usuario se cadastrando no sistema
-     *
-     *
      *
      * */
 
@@ -87,16 +86,42 @@ class UserTest extends TestCase
     /**
      * @throws Exception
      */
-    public function test_user_can_buy_product()
+    public function test_user_can_order_product()
     {
         //prepare
         $user = User::latest()->first();
         $user['qtd'] = random_int(1,5);
         $product = Product::find(random_int(0,24));
         //act
-        $response = $this->actingAs($user)->post('api/buy_product/' . 1, $user->toArray());
+        $response = $this->actingAs($user)->post('api/order_product/' . 1, $user->toArray());
         //assert
         $response->assertStatus(Response::HTTP_OK);
 
+    }
+
+    public function test_user_can_deposit()
+    {
+        //preapre
+        $user = User::latest()->first();
+        $payload = [
+            'deposit' => 10000
+        ];
+        //act
+        $response = $this->actingAs($user)->post('api/deposit',$payload);
+        //assert
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    public function test_user_can_pay_product()
+    {
+        //prepare
+        $user = User::latest()->first();
+        $repository = new UserRepository();
+        $client = $repository->get_client($user);
+        $order = $client->orders[0];
+        //act
+        $response = $this->actingAs($user)->post('api/buy_product/' . $order->id);
+        //assert
+        $response->assertStatus(Response::HTTP_CREATED);
     }
 }

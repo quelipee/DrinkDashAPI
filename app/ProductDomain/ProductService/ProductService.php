@@ -57,48 +57,4 @@ class ProductService
         return true;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function buy_product($id, $user): object
-    {
-        $product = Product::find($id);
-        $stock_prod = $product->stock;
-
-        if ($stock_prod->available_quantity <= 0)
-        {
-            throw new Exception('Error: Não tem produto no estoque!!!');
-        }
-
-        $client = $this->repository->get_client($user);
-        $order = new Order([
-            'date_order' => Carbon::now(),
-            'status_order' => OrderStatusEnum::PENDING,
-        ]);
-        $order->client()->associate($client);
-        $order->save();
-
-        $order_item = new OrderItem([
-            'amount' => $user->qtd, // TODO ESTA INFORMAÇÃO TEM QUE VIM DO INPUT DO FRONT PARA SABER A QUANTIDADE QUE O USUARIO QUER COMPRAR
-            'unit_price' => $product->price,
-        ]);
-        $order_item->order()->associate($order);
-        $order_item->product()->associate($product);
-        $order_item->save();
-
-        $stock = Stock::find($stock_prod->id);
-        $stock->fill([
-            'available_quantity' => ($stock_prod->available_quantity - 1)
-        ]);
-        $stock->save();
-
-        /*
-         *
-         *
-         * pegando o ultimo pedido que o cliente fez e retornando para o controller
-         *
-         *
-         * */
-        return $client->orders()->latest('date_order')->first();
-    }
 }
