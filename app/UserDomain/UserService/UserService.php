@@ -63,7 +63,7 @@ class UserService
          $balance->client()->associate($client);
          $balance->save();
 
-         return $client;
+         return $user;
     }
 
     /**
@@ -83,9 +83,10 @@ class UserService
             throw new Exception('Usuario não encontrado, email ou senha invalidas!!');
         }
 
-        session()->start();
-        $user = User::find(Auth::id());
-        return $user->load('client');
+        $user = Auth::user();
+        $token = $user->createToken('JWT');
+
+        return $token->plainTextToken;
     }
 
     /**
@@ -98,7 +99,9 @@ class UserService
             throw new Exception('Usuario não esta logado!!!');
         }
 
-        Auth::logout();
+        $user = Auth::user();
+        $user->tokens()->delete();
+
         return true;
     }
 
@@ -139,6 +142,12 @@ class UserService
         }
 
         $client = $this->repository->get_client($user);
+
+        if ($user->qtd == null)
+        {
+            throw new Exception('Error: Usuario não informou a quantidade!!!');
+        }
+
         $order = new Order([
             'date_order' => Carbon::now(),
             'status_order' => OrderStatusEnum::PENDING,
@@ -202,6 +211,6 @@ class UserService
         ]);
         $order->save();
 
-        return $order->status_order;
+        return $order;
     }
 }

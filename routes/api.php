@@ -32,7 +32,7 @@ Route::middleware(['guest'])->group(function ()
     Route::post('login',[UserController::class,'login'])->name('login');
 });
 
-Route::middleware(['auth'])->group(function ()
+Route::middleware(['auth:sanctum'])->group(function ()
 {
     Route::post('order_product/{id}',[UserController::class,'order_product'])->name('order_product');
     Route::post('deposit',[UserController::class,'deposit'])->name('deposit');
@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function ()
     Route::post('logout', [UserController::class,'logout'])->name('logout');
 });
 
-Route::middleware(['auth'])->group(function ()
+Route::middleware(['auth:sanctum'])->group(function ()
 {
     Route::get('get-user',[UserGetController::class,'get_user'])->name('get_user');
     Route::get('get-list-order',[UserGetController::class,'get_list_order'])->name('get_list_order');

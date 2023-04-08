@@ -10,9 +10,12 @@ use App\UserDomain\UserDTO\UserDTO;
 use App\UserDomain\UserDTO\UserLoginDTO;
 use App\UserDomain\UserService\UserService;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -26,8 +29,8 @@ class UserController extends Controller
      */
     public function store(UserRequest $userRequest): JsonResponse
     {
-        $created =  $this->userService->store(UserDTO::fromRequestValidated($userRequest));
-        return response()->json($created, Response::HTTP_CREATED);
+        $user =  $this->userService->store(UserDTO::fromRequestValidated($userRequest));
+        return response()->json($user,Response::HTTP_CREATED);
     }
 
     /**
@@ -35,8 +38,8 @@ class UserController extends Controller
      */
     public function login(UserLoginRequest $loginRequest): JsonResponse
     {
-        $login = $this->userService->authenticate(UserLoginDTO::fromLoginRequestValidated($loginRequest));
-        return response()->json($login, Response::HTTP_CREATED);
+        $token = $this->userService->authenticate(UserLoginDTO::fromLoginRequestValidated($loginRequest));
+        return response()->json($token, Response::HTTP_CREATED);
     }
 
     /**
@@ -53,7 +56,7 @@ class UserController extends Controller
             throw new Exception('Error');
         }catch (Exception $e)
         {
-            return response()->json($e->getMessage(),Response::HTTP_NOT_FOUND);
+            return response()->json($e->getMessage(),Response::HTTP_NO_CONTENT);
         }
     }
 
