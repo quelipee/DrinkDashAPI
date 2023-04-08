@@ -124,4 +124,24 @@ class UserTest extends TestCase
         //assert
         $response->assertStatus(Response::HTTP_CREATED);
     }
+
+    public function test_get_user()
+    {
+        //prepare
+        $user = User::first();
+        //act
+        $response = $this->actingAs($user)->get('api/get-user');
+        //assert
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function test_get_list_order()
+    {
+        //prepare
+        $user = User::latest()->first();
+        //act
+        $response = $this->actingAs($user)->get('api/get-list-order');
+        //assert
+        $response->assertStatus(Response::HTTP_OK);
+    }
 }

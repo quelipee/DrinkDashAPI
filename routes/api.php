@@ -1,8 +1,8 @@
 <?php
 
 use App\ProductDomain\ProductController\ProductController;
-use App\ProductDomain\ProductService\ProductService;
 use App\UserDomain\UserController\UserController;
+use App\UserDomain\UserController\UserGetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +41,9 @@ Route::middleware(['auth'])->group(function ()
     Route::post('logout', [UserController::class,'logout'])->name('logout');
 });
 
+Route::middleware(['auth'])->group(function ()
+{
+    Route::get('get-user',[UserGetController::class,'get_user'])->name('get_user');
+    Route::get('get-list-order',[UserGetController::class,'get_list_order'])->name('get_list_order');
+})->name('get_frontend');
 

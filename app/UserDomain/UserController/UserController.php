@@ -65,6 +65,10 @@ class UserController extends Controller
     {
         $deposit = $this->userService->user_deposit($request);
 
+        if (!$deposit)
+        {
+            return response()->json(['message' => 'Erro ao realizar o depósito.'],Response::HTTP_NOT_FOUND);
+        }
         return response()->json($deposit,Response::HTTP_CREATED);
     }
 
@@ -86,12 +90,12 @@ class UserController extends Controller
     /**
      * @throws Exception
      */
-    public function buy_product($id)
+    public function buy_product($id): JsonResponse
     {
         /*
          * a variavel $id esta mostrando qual pedido que o usuario vai pagar
          * */
         $pay = $this->userService->buy_product($id);
-        return \response()->json($pay,Response::HTTP_CREATED);
+        return response()->json($pay,Response::HTTP_CREATED);
     }
 }
