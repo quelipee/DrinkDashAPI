@@ -86,7 +86,11 @@ class UserService
         $user = Auth::user();
         $token = $user->createToken('JWT');
 
-        return $token->plainTextToken;
+        return [
+            'email' => $loginDTO->email,
+            'password' => $loginDTO->password,
+            'token' => $token
+        ];
     }
 
     /**
@@ -101,6 +105,7 @@ class UserService
 
         $user = Auth::user();
         $user->tokens()->delete();
+        // $user->currentAccessToken()->delete();
 
         return true;
     }

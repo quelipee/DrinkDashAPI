@@ -21,7 +21,8 @@ class UserResouce extends JsonResource
             'address_billing' => $this->address_billing,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
-            'user_id' => $this->user_id
+            'user_id' => $this->user_id,
+            'balance' => $this->balance
         ];
     }
 }

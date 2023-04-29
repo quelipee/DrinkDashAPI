@@ -45,19 +45,16 @@ class UserController extends Controller
     /**
      * @throws Exception
      */
-    public function logout(): JsonResponse
+    public function logout()
     {
-        $this->userService->destroySession();
-        if (!Auth::user())
-        {
-            return response()->json([],Response::HTTP_FOUND);
+        $logout =  $this->userService->destroySession();
+
+        if(!$logout){
+            throw new Exception("Error Processing Request", 1);
         }
-        try {
-            throw new Exception('Error');
-        }catch (Exception $e)
-        {
-            return response()->json($e->getMessage(),Response::HTTP_NO_CONTENT);
-        }
+
+        return $logout;
+
     }
 
 

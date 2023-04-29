@@ -89,11 +89,11 @@ class UserTest extends TestCase
     public function test_user_can_order_product()
     {
         //prepare
-        $user = User::latest()->first();
+        $user = User::first();
         $user['qtd'] = random_int(1,5);
         $product = Product::find(random_int(0,24));
         //act
-        $response = $this->actingAs($user)->post('api/order_product/' . 1, $user->toArray());
+        $response = $this->actingAs($user)->post('api/order_product/' . $product->id, $user->toArray());
         //assert
         $response->assertStatus(Response::HTTP_OK);
 
@@ -118,7 +118,7 @@ class UserTest extends TestCase
         $user = User::latest()->first();
         $repository = new UserRepository();
         $client = $repository->get_client($user);
-        $order = $client->orders[0];
+        $order = $client->orders[1];
         //act
         $response = $this->actingAs($user)->post('api/buy_product/' . $order->id);
         //assert
@@ -138,7 +138,7 @@ class UserTest extends TestCase
     public function test_get_list_order()
     {
         //prepare
-        $user = User::latest()->first();
+        $user = User::first();
         //act
         $response = $this->actingAs($user)->get('api/get-list-order');
         //assert

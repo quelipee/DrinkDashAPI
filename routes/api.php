@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function ()
     Route::post('deposit',[UserController::class,'deposit'])->name('deposit');
     Route::post('buy_product/{id}',[UserController::class,'buy_product'])->name('buy_product');
 
-    Route::post('logout', [UserController::class,'logout'])->name('logout');
+    Route::get('logout', [UserController::class,'logout'])->name('logout');
 });
 
 Route::middleware(['auth:sanctum'])->group(function ()
