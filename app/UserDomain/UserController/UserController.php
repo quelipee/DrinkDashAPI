@@ -75,7 +75,7 @@ class UserController extends Controller
     /**
      * @throws Exception
      */
-    public function order_product($id, Request $request): OrderResource //pedir produto
+    public function order_product($id, Request $request) //pedir produto
     {
         /*
          * TODO CONFIGURAR A QUANTIDADE QUE RECEBE DO INPUT DO FRONT END, ONDE RECEBE AQUI NO (REQUEST)

@@ -90,10 +90,12 @@ class UserTest extends TestCase
     {
         //prepare
         $user = User::first();
-        $user['qtd'] = random_int(1,5);
+        // $user['qtd'] = random_int(1,5);
+        $qtd = random_int(1,5);
         $product = Product::find(random_int(0,24));
         //act
-        $response = $this->actingAs($user)->post('api/order_product/' . $product->id, $user->toArray());
+        $response = $this->actingAs($user)->post('api/order_product/' . $product->id, ['qtd' => $qtd]);
+        // $response = $this->actingAs($user)->post('api/order_product/' . $product->id, $user->toArray());
         //assert
         $response->assertStatus(Response::HTTP_OK);
 
@@ -141,6 +143,16 @@ class UserTest extends TestCase
         $user = User::first();
         //act
         $response = $this->actingAs($user)->get('api/get-list-order');
+        //assert
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function test_view_product()
+    {
+        //prepare
+        $product = Product::first();
+        //act
+        $response = $this->get('api/product/' . $product->id);
         //assert
         $response->assertStatus(Response::HTTP_OK);
     }

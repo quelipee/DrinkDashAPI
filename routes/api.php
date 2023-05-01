@@ -25,6 +25,7 @@ Route::get('insert',[ProductController::class,'insert_bd_products'])->name('inse
 
 Route::get('get_all_products',[ProductController::class,'get_all_products'])->name('get_all_products');//listando todos os produtos
 
+Route::get('product/{id}',[ProductController::class,'getProduct'])->name('get_product');
 
 Route::middleware(['guest'])->group(function ()
 {

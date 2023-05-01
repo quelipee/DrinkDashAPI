@@ -136,19 +136,23 @@ class UserService
         return $balance_deposit;
     }
 
-    public function order_product($id, $user): object
+    public function order_product($id, $request)
     {
         $product = Product::find($id);
         $stock_prod = $product->stock;
+        $user = Auth::user();
 
         if ($stock_prod->available_quantity <= 0)
         {
             throw new Exception('Error: Não tem produto no estoque!!!');
         }
+        elseif($request->qtd > $stock_prod->available_quantity){
+            throw new Exception('Error: Não possui essa quantidade no estoque!!');
+        }
 
         $client = $this->repository->get_client($user);
 
-        if ($user->qtd == null)
+        if ($request->qtd == null || $request->qtd == 0)
         {
             throw new Exception('Error: Usuario não informou a quantidade!!!');
         }
@@ -161,7 +165,7 @@ class UserService
         $order->save();
 
         $order_item = new OrderItem([
-            'amount' => $user->qtd, // TODO ESTA INFORMAÇÃO TEM QUE VIM DO INPUT DO FRONT PARA SABER A QUANTIDADE QUE O USUARIO QUER SOLICITAR PARA COMPRAR
+            'amount' => $request->qtd, // TODO ESTA INFORMAÇÃO TEM QUE VIM DO INPUT DO FRONT PARA SABER A QUANTIDADE QUE O USUARIO QUER SOLICITAR PARA COMPRAR
             'unit_price' => $product->price,
         ]);
         $order_item->order()->associate($order);

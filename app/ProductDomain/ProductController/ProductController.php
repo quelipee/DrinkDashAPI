@@ -42,6 +42,12 @@ class ProductController extends Controller
         return ProductResource::collection($collection);
     }
 
+    public function getProduct($id)
+    {
+        $product = $this->repository->get_id_product($id);
+        return $product;
+    }
+
     /**
      * @throws Exception
      */
