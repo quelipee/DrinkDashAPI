@@ -45,6 +45,7 @@ class ProductController extends Controller
     public function getProduct($id)
     {
         $product = $this->repository->get_id_product($id);
+        $product['stock'] = $product->stock;
         return $product;
     }
 

@@ -156,4 +156,13 @@ class UserTest extends TestCase
         //assert
         $response->assertStatus(Response::HTTP_OK);
     }
+
+    public function test_get_product(){
+        //prepare
+        $product = Product::find(3);
+        //act
+        $response = $this->get('api/product/' . $product->id);
+        //assert
+        $response->assertStatus(Response::HTTP_OK);
+    }
 }

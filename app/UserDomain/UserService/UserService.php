@@ -144,17 +144,17 @@ class UserService
 
         if ($stock_prod->available_quantity <= 0)
         {
-            throw new Exception('Error: Não tem produto no estoque!!!');
+            throw new Exception('Erro: Não tem produto no estoque!!!');
         }
         elseif($request->qtd > $stock_prod->available_quantity){
-            throw new Exception('Error: Não possui essa quantidade no estoque!!');
+            throw new Exception('Erro: Não possui essa quantidade no estoque!!');
         }
 
         $client = $this->repository->get_client($user);
 
         if ($request->qtd == null || $request->qtd == 0)
         {
-            throw new Exception('Error: Usuario não informou a quantidade!!!');
+            throw new Exception('Erro: Usuario não informou a quantidade!!!');
         }
 
         $order = new Order([
@@ -174,7 +174,7 @@ class UserService
 
         $stock = Stock::find($stock_prod->id);
         $stock->fill([
-            'available_quantity' => ($stock_prod->available_quantity - 1)
+            'available_quantity' => ($stock_prod->available_quantity - $request->qtd)
         ]);
         $stock->save();
 
@@ -196,7 +196,7 @@ class UserService
         $order = Order::find($id);
         if (!$order)
         {
-            throw new Exception('Error pedido não encontrado!!!');
+            throw new Exception('Erro pedido não encontrado!!!');
         }
 
         $client = $this->repository->get_client(Auth::user());
@@ -207,7 +207,7 @@ class UserService
 
         if ($balance->balance < $value_product)
         {
-            throw new Exception('Error: Não possui saldo suficiente!!');
+            throw new Exception('Não possui saldo suficiente!!');
         }
 
         $balance->fill([
