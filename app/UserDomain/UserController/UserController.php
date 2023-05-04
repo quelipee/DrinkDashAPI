@@ -87,6 +87,14 @@ class UserController extends Controller
         return OrderResource::make($order);
     }
 
+
+    public function order_product_cancel($id){
+        $cancel_order = $this->userService->cancelProduct($id);
+
+        return response()->json($cancel_order,Response::HTTP_CREATED);
+    }
+
+
     /**
      * @throws Exception
      */

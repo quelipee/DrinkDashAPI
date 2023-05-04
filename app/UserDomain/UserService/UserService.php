@@ -230,4 +230,37 @@ class UserService
 
         return $order;
     }
+
+    public function cancelProduct($id)
+    {
+        $client = $this->repository->get_client(Auth::user());
+        $order = Order::find($id);
+
+        if($order->client_id != $client->id){
+            throw new Exception("Erro: Esse usuario nao possui este pedido!!!");  
+        }
+
+        else if($order->status_order != 'Pendente'){
+            throw new Exception('Erro: Não pode cancelar um pedido concluído!!!');
+        }
+        
+        $ordered_item = $order->orders_items[0];
+        $product = [
+            'product_id' => $ordered_item->product_id,
+            'amount' => $ordered_item->amount,
+        ];
+
+        $stock_item = Stock::find($product['product_id']);
+        $stock_item->fill([
+            'available_quantity' => $stock_item->available_quantity += $product['amount']
+        ]);
+        $stock_item->save();
+
+        $cancel_order = $order->orders_items()->where('id',$ordered_item->id)->first();
+        $cancel_order->delete();
+        $order->delete();
+
+        return $client->orders;
+        
+    }
 }

@@ -165,4 +165,14 @@ class UserTest extends TestCase
         //assert
         $response->assertStatus(Response::HTTP_OK);
     }
+
+    public function test_user_can_cancel_order()
+    {
+        //prepare
+        $user = User::find(1);
+        //act
+        $response = $this->actingAs($user)->post('api/order_product_cancel/' . 10);
+        //assert
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
 }
