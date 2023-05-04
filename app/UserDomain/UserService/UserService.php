@@ -210,6 +210,14 @@ class UserService
             throw new Exception('Não possui saldo suficiente!!');
         }
 
+        if($order === 'Concluído'){
+            throw new Exception('Esse produto ja foi comprado!!!');
+        }
+
+        if($client->id != $order->client_id){
+            throw new Exception('Pedido não encontrado!!!');
+        }
+
         $balance->fill([
             'balance' => $balance->balance - $value_product
         ]);
