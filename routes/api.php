@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum'])->group(function ()
 {
     Route::post('order_product/{id}',[UserController::class,'order_product'])->name('order_product');
     Route::post('order_product_cancel/{id}',[UserController::class,'order_product_cancel'])->name('order_product_cancel');
+    Route::post('editProfile',[UserController::class,'editProfile'])->name('editProfile');
 
     Route::post('deposit',[UserController::class,'deposit'])->name('deposit');
     Route::post('buy_product/{id}',[UserController::class,'buy_product'])->name('buy_product');

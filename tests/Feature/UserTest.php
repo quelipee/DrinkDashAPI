@@ -21,7 +21,7 @@ class UserTest extends TestCase
         //preapre
         $payload = [
             'name' => fake()->name(),
-            'email' => fake()->email(),
+            'email' => 'fe@gmail.com',
             'password' => 123,
             'address_delivery' => 'vila jose sipos filho n°72', //entrega de entrega
             'address_billing' => 'vila jose sipos filho n°72',//endereço de cobrança
@@ -172,6 +172,22 @@ class UserTest extends TestCase
         $user = User::find(1);
         //act
         $response = $this->actingAs($user)->post('api/order_product_cancel/' . 10);
+        //assert
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    public function test_user_can_edit_profile()
+    {
+        //prepare
+        $user = User::first();
+        $payload = [
+            'name' => 'felipe m',
+            'address_delivery' => 'camargo 2',
+            'address_billing' => 'vila camargo',
+            'phone_number' => 15996925811
+        ];
+        //act
+        $response = $this->actingAs($user)->post('api/editProfile', $payload);
         //assert
         $response->assertStatus(Response::HTTP_CREATED);
     }

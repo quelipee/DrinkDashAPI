@@ -13,6 +13,7 @@ use App\Models\User;
 use App\UserDomain\Repository\UserRepository;
 use App\UserDomain\UserDTO\UserDTO;
 use App\UserDomain\UserDTO\UserLoginDTO;
+use App\UserDomain\UserDTO\UserUpdateDTO;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -84,7 +85,7 @@ class UserService
         }
 
         $user = Auth::user();
-        $token = $user->createToken('JWT');
+        $token = $user->createToken($loginDTO->email)->plainTextToken;
 
         return [
             'email' => $loginDTO->email,
@@ -108,6 +109,22 @@ class UserService
         // $user->currentAccessToken()->delete();
 
         return true;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function edit_user(UserUpdateDTO $userDTO): object
+    {
+        $client = $this->repository->get_client(Auth::user());
+
+        if(!$client){
+            throw new Exception('Erro: Usuario não encontrado!!');
+        }
+
+        $client->fill(array_filter((array)$userDTO));
+        $client->save();
+        return $client;
     }
 
     /**
@@ -237,13 +254,13 @@ class UserService
         $order = Order::find($id);
 
         if($order->client_id != $client->id){
-            throw new Exception("Erro: Esse usuario nao possui este pedido!!!");  
+            throw new Exception("Erro: Esse usuario nao possui este pedido!!!");
         }
 
         else if($order->status_order != 'Pendente'){
             throw new Exception('Erro: Não pode cancelar um pedido concluído!!!');
         }
-        
+
         $ordered_item = $order->orders_items[0];
         $product = [
             'product_id' => $ordered_item->product_id,
@@ -261,6 +278,6 @@ class UserService
         $order->delete();
 
         return $client->orders;
-        
+
     }
 }

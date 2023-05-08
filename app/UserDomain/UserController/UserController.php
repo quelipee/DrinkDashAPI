@@ -6,17 +6,15 @@ use App\Http\Controllers\Controller;
 use App\ProductDomain\Resources\OrderResource;
 use App\UserDomain\Requests\UserLoginRequest;
 use App\UserDomain\Requests\UserRequest;
+use App\UserDomain\Requests\UserUpdateRequest;
 use App\UserDomain\UserDTO\UserDTO;
 use App\UserDomain\UserDTO\UserLoginDTO;
+use App\UserDomain\UserDTO\UserUpdateDTO;
 use App\UserDomain\UserService\UserService;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -55,6 +53,17 @@ class UserController extends Controller
 
         return $logout;
 
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function editProfile(UserUpdateRequest $request): JsonResponse
+    {
+        $edit_profile = $this->userService->edit_user(UserUpdateDTO::fromRequestValidated($request));
+
+        return response()->json($edit_profile, Response::HTTP_CREATED);
     }
 
 
