@@ -29,7 +29,7 @@ class UserService
     /**
      * @throws Exception
      */
-    public function store(UserDTO $userDTO)
+    public function store(UserDTO $userDTO): User
     {
         $all_users = $this->repository->all_users();
 
@@ -42,7 +42,6 @@ class UserService
         }
 
         $user = new User([
-            'name' => $userDTO->name,
             'email' => $userDTO->email,
             'password' => $userDTO->password
         ]);
@@ -72,7 +71,7 @@ class UserService
      *
      * @throws Exception
      */
-    public function authenticate(UserLoginDTO $loginDTO)
+    public function authenticate(UserLoginDTO $loginDTO): array
     {
         $credentials = [
             'email' => $loginDTO->email,
@@ -85,6 +84,11 @@ class UserService
         }
 
         $user = Auth::user();
+
+        if ($user->isAdmin != 0){
+            throw new Exception('Usuario não encontrado, email ou senha invalidas!!');
+        }
+
         $token = $user->createToken($loginDTO->email)->plainTextToken;
 
         return [

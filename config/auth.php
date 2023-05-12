@@ -46,7 +46,7 @@ return [
             'hash' => false,
         ],
     ],
-    // api sactum edit 
+    // api sactum edit
     /*
     |--------------------------------------------------------------------------
     | User Providers

@@ -191,4 +191,29 @@ class UserTest extends TestCase
         //assert
         $response->assertStatus(Response::HTTP_CREATED);
     }
+
+    public function test_create_user_admin()
+    {
+        //prepare
+        $payload = [
+            'email' => 'admin@gmail.com',
+            'password' => 123
+        ];
+        //act
+        $response = $this->post('store_adm',$payload);
+        //assert
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    public function test_adm_can_sign_in(){
+        //prepare
+        $adm = [
+            'email' => 'admin@gmail.com',
+            'password' => '123'
+        ];
+        //act
+        $response = $this->post('login_adm',$adm);
+        //assert
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
 }

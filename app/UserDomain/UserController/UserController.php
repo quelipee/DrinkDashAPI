@@ -48,7 +48,7 @@ class UserController extends Controller
         $logout =  $this->userService->destroySession();
 
         if(!$logout){
-            throw new Exception("Error Processing Request", 1);
+            throw new Exception("Error Processing Requests", 1);
         }
 
         return $logout;

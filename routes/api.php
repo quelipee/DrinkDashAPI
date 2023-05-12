@@ -27,7 +27,7 @@ Route::get('get_all_products',[ProductController::class,'get_all_products'])->na
 
 Route::get('product/{id}',[ProductController::class,'getProduct'])->name('get_product');
 
-Route::middleware(['guest'])->group(function ()
+Route::middleware(['guest:sanctum'])->group(function ()
 {
     Route::post('register',[UserController::class,'store'])->name('register');
     Route::post('login',[UserController::class,'login'])->name('login');
