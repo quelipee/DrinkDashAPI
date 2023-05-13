@@ -1,5 +1,6 @@
 <?php
 
+use App\ProductDomain\ProductController\ProductController;
 use App\UserAdmDomain\AdmController\AdmController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,8 +28,13 @@ Route::middleware(['guest'])->group(function (){
 
 Route::middleware(['auth'])->group(function (){
     Route::get('index',[AdmController::class,'index'])->name('index');
+    Route::get('users',[AdmController::class,'users'])->name('users');
+    Route::get('add_product',[AdmController::class,'add_product'])->name('add_product');
+    Route::get('edit_product/{id}',[AdmController::class,'edit_product'])->name('edit_product');
 })->name('auth_get');
 
 Route::middleware('auth')->group(function (){
     Route::post('logout',[AdmController::class,'logout'])->name('logout');
+    Route::post('add_product',[ProductController::class,'insert_products'])->name('add_product');
+    Route::put('edit_product_bd/{id}',[ProductController::class,'edit_product_bd'])->name('edit_product_bd');
 })->name('auth_post');

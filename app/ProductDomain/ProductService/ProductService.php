@@ -7,10 +7,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Stock;
+use App\ProductDomain\Requests\ProductRequest;
 use App\UserDomain\Repository\UserRepository;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductService
@@ -55,6 +57,38 @@ class ProductService
         }
 
         return true;
+    }
+
+    public function store(array $product, string $path)
+    {
+        $new_product = new Product([
+            'name' => $product['name'],
+            'description' => $product['description'],
+            'img_product' => $path,
+            'price' => $product['price'],
+            'category' => $product['category']
+        ]);
+        $new_product->save();
+        $stock = new Stock([
+            'available_quantity' => $product['available_quantity']
+        ]);
+        $stock->product()->associate($new_product);
+        $stock->save();
+
+        return $product;
+    }
+
+    public function edit($request,$id)
+    {
+        $update_product = Product::find($id);
+        $update_product->fill($request)->save();
+
+        $update_stock = Stock::where('product_id',$update_product->id)->first();
+        $update_stock->fill([
+            'available_quantity' => $request['available_quantity']
+        ])->save();
+
+        return $update_product->stock;
     }
 
 }

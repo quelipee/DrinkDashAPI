@@ -8,9 +8,12 @@ use App\Models\Product;
 use App\Models\User;
 use App\ProductDomain\ProductService\ProductService;
 use App\ProductDomain\Repository\ProductRepository;
+use App\ProductDomain\Requests\ProductRequest;
+use App\ProductDomain\Requests\ProductUpdateRequest;
 use App\ProductDomain\Resources\OrderResource;
 use App\ProductDomain\Resources\ProductResource;
 use App\UserDomain\Repository\UserRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
@@ -35,6 +38,13 @@ class ProductController extends Controller
         return response()->json([],Response::HTTP_CREATED);
     }
 
+    public function insert_products(ProductRequest $request): RedirectResponse
+    {
+        $path = $request->file('img_product')->store('images','public');
+        $this->productService->store($request->validated(),$path);
+        return response()->redirectToRoute('index');
+    }
+
     public function get_all_products(): AnonymousResourceCollection
     {
         $products = $this->repository->get_all();
@@ -52,4 +62,10 @@ class ProductController extends Controller
     /**
      * @throws Exception
      */
+
+    public function edit_product_bd(ProductUpdateRequest $request, $id) : RedirectResponse
+    {
+        $this->productService->edit($request->validated(),$id);
+        return response()->redirectToRoute('index')->setStatusCode(Response::HTTP_CREATED);
+    }
 }
