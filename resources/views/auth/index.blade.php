@@ -34,7 +34,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                 {{--                            @dd($products)--}}
                                 @foreach($products as $product)
-                                    <tr>
+                                    <tr class="hover:bg-gray-200">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{$product->name}}
                                         </td>
@@ -65,7 +65,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div class="mt-20">
+                            <div class="mt-20 p-5">
                                 {{ $products->links() }}
                             </div>
                         </div>

@@ -53,7 +53,7 @@
                                placeholder="Quantidade" value="{{ $product->stock->available_quantity }}">
                     </div>
                     <div class="flex items-center justify-end">
-                        <button type="submit" class="bg-blue-400 text-white font-semibold border hover:bg-blue-500 rounded-md px-2 py-1">adicionar</button>
+                        <button type="submit" class="bg-blue-400 text-white font-semibold border hover:bg-blue-500 rounded-md px-2 py-1">salvar</button>
                     </div>
                 </div>
             </div>
